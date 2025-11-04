@@ -176,7 +176,12 @@ git config --global user.email "prenom.nom@univ-rennes.fr"
 code .
 ```
 
-> Vous devriez voir apparaître un message vous indiquant le téléchargement de vscode-server sur la machine virtuelle. Si un message d'erreur apparaît à la place, assurez-vous que vous avez bien suivi les [instructions](#install-vs) d'installation de Visual Studio Code, puis redémarrez le terminal et la machine virtuelle.
+> Vous devriez voir apparaître un message vous indiquant le téléchargement de vscode-server sur la machine virtuelle. Si un message d'erreur apparaît à la place, qui contient `Exec format error`, exécutez les commandes suivantes :
+> ```bash
+> sudo sh -c 'echo :WSLInterop:M::MZ::/init:PF > /usr/lib/binfmt.d/WSLInterop.conf'
+> sudo systemctl restart systemd-binfmt
+> ```
+> S'il s'agit d'une erreur différente, assurez-vous que vous avez bien suivi les [instructions](#install-vs) d'installation de Visual Studio Code, puis redémarrez le terminal et la machine virtuelle.
 
 Ouvrez l'un des fichiers Python du projet dans VSCode. Un message devrait apparaître, vous invitant à installer l'extension Python dans WSL. Faites cette installation.
 
