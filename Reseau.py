@@ -34,12 +34,21 @@ class Reseau:
         self.strat = strat
 
     def valider_reseau(self) -> bool:
-        # TODO
+        visited = self.parcourir_reseau()
+        if len(self.noeuds) == len(visited):
+            return True
         return False
 
     def valider_distribution(self, t: Terrain) -> bool:
-        # TODO
-        return False
+        visited = self.parcourir_reseau()
+        noeuds = self.noeuds
+
+        possible_coord = {noeuds[v] for v in visited}
+        clients = t.get_clients()
+        for client in clients:
+            if client not in possible_coord:
+                return False
+        return True
 
     def configurer(self, t: Terrain):
         self.noeud_entree, self.noeuds, self.arcs  = self.strat.configurer(t)
@@ -47,6 +56,30 @@ class Reseau:
     def afficher(self) -> None:
         # TODO
         pass
+
+    def parcourir_reseau(self):
+        noeuds = self.noeuds
+        entry_id = self.noeud_entree
+        if self.noeud_entree not in self.noeuds or self.noeud_entree == -1:
+            return set()
+        # id de noeud_entree
+        graph = {n: [] for n in noeuds.keys()}
+        for n1, n2 in self.arcs:
+            graph[n1].append(n2)
+            graph[n2].append(n1)
+
+        # Application de l'algorithme BFS :
+        visited = set()
+        queue = [entry_id]
+        while queue:
+            front = queue.pop(0)
+            if front not in visited:
+                visited.add(front)
+                for neighbor in graph[front]:
+                    if neighbor not in visited:
+                        queue.append(neighbor)
+
+        return visited
 
     def afficher_avec_terrain(self, t: Terrain) -> None:
         for ligne, l in enumerate(t.cases):
